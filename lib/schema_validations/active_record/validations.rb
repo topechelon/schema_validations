@@ -188,7 +188,7 @@ module SchemaValidations
 
         def has_case_insensitive_index?(column, scope)
           indexed_columns = (scope + [column.name]).map(&:to_sym).sort
-          index = column.indexes.select { |i| i.unique && i.columns.map(&:to_sym).sort == indexed_columns }.first
+          index = column.indexes.reject{|i| i.columns.is_a?(String) }.select { |i| i.unique && i.columns.map(&:to_sym).sort == indexed_columns }.first
 
           index && index.respond_to?(:case_sensitive?) && !index.case_sensitive?
         end
